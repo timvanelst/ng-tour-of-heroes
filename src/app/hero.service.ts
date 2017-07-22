@@ -16,21 +16,24 @@ export class HeroService{
             .toPromise()
             .then(response => response.json().data as Hero[])
             .catch(this.handleError);
-     }
+    }
 
-     getHero(id: Number) : Promise<Hero>{
-         return this.getHeroes()
-            .then(heroes => heroes.find(hero => hero.id === id));
-     }
+    getHero(id: number): Promise<Hero> {
+    const url = `${this.heroesUrl}/${id}`;
+    return this.http.get(url)
+        .toPromise()
+        .then(response => response.json().data as Hero)
+        .catch(this.handleError);
+    }
 
-     getHeroesSlowly(): Promise<Hero[]> {
-         return new Promise(resolve => 
-            // Simulate server latency with 2 second delay
-            setTimeout(() => resolve(this.getHeroes()), 2000));
-     }
+    getHeroesSlowly(): Promise<Hero[]> {
+        return new Promise(resolve => 
+        // Simulate server latency with 2 second delay
+        setTimeout(() => resolve(this.getHeroes()), 2000));
+    }
 
-     private handleError(error: any){
-         console.log('An error occured', error); // for demo purposes only
-         return Promise.reject(error.Message || error);
-     }
+    private handleError(error: any){
+        console.log('An error occured', error); // for demo purposes only
+        return Promise.reject(error.Message || error);
+    }
 }
